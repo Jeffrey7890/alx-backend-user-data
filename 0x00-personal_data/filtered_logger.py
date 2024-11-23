@@ -8,7 +8,7 @@ import os
 import re
 from typing import List, Tuple
 
-PII_FIELDS = ('password', 'email', 'ssn', 'Name', 'phone')
+PII_FIELDS = ('password', 'email', 'ssn', 'name', 'phone')
 
 
 class RedactingFormatter(logging.Formatter):
@@ -72,3 +72,23 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
             database=db_name
             )
     return mydb
+
+
+def main() -> None:
+    """ main function """
+    logger = get_logger()
+
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users;")
+    for row in cursor:
+        message = ";".join(
+                [f"{col}={val}" for col, val
+                    in zip(cursor.column_names, row)])
+        logger.info(message)
+    cursor.close()
+    db.close()
+
+
+if __name__ == "__main__":
+    main()
