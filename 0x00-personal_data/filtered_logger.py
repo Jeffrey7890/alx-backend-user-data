@@ -3,7 +3,7 @@
 """ Personal data for users """
 
 import logging
-import mysql.connector # type: ignore
+import mysql.connector  # type: ignore
 import os
 import re
 from typing import List, Tuple
