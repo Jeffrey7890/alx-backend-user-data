@@ -20,6 +20,7 @@ if os.getenv('AUTH_TYPE') == 'auth':
 
 @app.before_request
 def auth_request():
+    """ validating requests """
     if auth is not None:
         paths = [
                 '/api/v1/status/',
