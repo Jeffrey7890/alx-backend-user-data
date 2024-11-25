@@ -4,6 +4,7 @@
 
 
 from api.v1.auth.auth import Auth
+import base64
 
 
 class BasicAuth(Auth):
@@ -19,3 +20,21 @@ class BasicAuth(Auth):
         if authorization_header.startswith('Basic '):
             return authorization_header[len('Basic '):]
         return None
+
+    def decode_base64_authorization_header(
+            self,
+            base64_authorization_header: str) -> str:
+        """ decoding base64 to ascii """
+        if base64_authorization_header is None:
+            return None
+        if type(base64_authorization_header) is not str:
+            return None
+        valid = None
+        try:
+            valid = base64.b64decode(
+                    base64_authorization_header,
+                    validate=True)
+        except Exception:
+            return None
+        decode_str = valid.decode('utf-8')
+        return decode_str
