@@ -15,6 +15,16 @@ class Auth:
     def __init__(self):
         self._db = DB()
 
+    def create_session(self, email: str) -> str:
+        """ create a session id """
+        try:
+            user = self._db.find_user_by(email=email)
+            s_id = self._generate_uuid()
+            self._db.update_user(user.id, session_id=s_id)
+            return s_id
+        except NoResultFound:
+            return None
+
     def valid_login(self, email: str, password: str) -> bool:
         """ validate user login """
         try:
